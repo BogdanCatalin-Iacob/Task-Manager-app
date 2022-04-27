@@ -21,12 +21,18 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_tasks")
 def get_tasks():
-    tasks = mongo.db.tasks.find()
+    '''
+    Get tasks from db
+    '''
+    tasks = list(mongo.db.tasks.find())
     return render_template("tasks.html", tasks=tasks)
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    '''
+    Register new user
+    '''
     if request.method == "POST":
         # check if username already exists in db
         existing_user = mongo.db.users.find_one(
@@ -52,6 +58,9 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    '''
+    User login
+    '''
     if request.method == "POST":
         # check if username exists in db
         existing_user = mongo.db.users.find_one(
@@ -81,7 +90,9 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
-    # grab the session user's username from db
+    '''
+    Grab the session user's username from db
+    '''
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
 
